@@ -4,7 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 def hhmm_to_minutes(hhmm):
-    h, m = map(int, hhmm.split(":"))
+    h, m = map(int, hhmm.split(':'))
     return h * 60 + m
 
 df_all = pd.read_csv(r"https://raw.githubusercontent.com/bkaanulgen/Aligner/refs/heads/main/csv/All.csv", sep=';')
@@ -17,43 +17,30 @@ recommended_minutes = hhmm_to_minutes('02:00')
 
 st.set_page_config(
     page_title='Filiz🌱 Plak Takibi',
-    layout="wide",
-    page_icon="🌱",
-    initial_sidebar_state="expanded"
-)
-
-st.markdown(
-    """
-    <style>
-    :root {
-        --primary-background-color: #ffffff;
-        --secondary-background-color: #f0f2f6;
-        --text-color: #000000;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
+    layout='wide',
+    page_icon='🌱',
+    initial_sidebar_state='expanded'
 )
 
 st.title('Filiz🌱 Plak Takibi')
 st.subheader('Günlük Toplam Çıkarılma Süreleri')
 
 sum_show_labels = st.radio(
-    "Veri Etiketlerini Göster / Gizle:",
-    ("Göster", "Gizle")
+    'Veri Etiketlerini Göster / Gizle:',
+    ('Göster', 'Gizle')
 )
-sum_text_values = df_sum["Toplam Süre"] if sum_show_labels == "Göster" else None
+sum_text_values = df_sum['Toplam Süre'] if sum_show_labels == 'Göster' else None
 
 
 fig = go.Figure()
 
 # Red dotted straight line at 02:00
 fig.add_trace(go.Scatter(
-    x=df_sum["Tarih"],
+    x=df_sum['Tarih'],
     y=[recommended_minutes] * len(df_sum),
-    mode="lines",
-    name="Tavsiye Edilen Süre",
-    line=dict(color="red", dash="dot", width=1.2),
+    mode='lines',
+    name='Tavsiye Edilen Süre',
+    line=dict(color='red', dash='dot', width=1.2),
     opacity=0.8
 ))
 
@@ -75,16 +62,16 @@ fig.add_trace(go.Scatter(
     marker=dict(color='#1c4587', size=6),
     text=sum_text_values,  # Show HH:MM above points
     textposition='top center',
-    textfont=dict(size=14, color="#363a40")
+    textfont=dict(size=14, color='#363a40')
 ))
 
 # Layout
 fig.update_layout(
-    # title="Günlük Toplam Çıkarılma Süresi",
-    xaxis_title="Tarih",
-    yaxis_title="Süre  ( Saat : Dakika )",
-    legend_title="Veriler",
-    template="simple_white",
+    # title='Günlük Toplam Çıkarılma Süresi',
+    xaxis_title='Tarih',
+    yaxis_title='Süre  ( Saat : Dakika )',
+    legend_title='Veriler',
+    template='simple_white',
     height=500
 )
 
