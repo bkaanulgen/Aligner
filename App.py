@@ -21,6 +21,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+st.markdown(
+    """
+    <style>
+    :root {
+        --primary-background-color: #ffffff;
+        --secondary-background-color: #f0f2f6;
+        --text-color: #000000;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title('Filiz🌱 Plak Takibi')
 st.subheader('Günlük Toplam Çıkarılma Süreleri')
 
