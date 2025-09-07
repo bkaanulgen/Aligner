@@ -72,10 +72,11 @@ fig.update_layout(
     yaxis_title='Süre  ( Saat : Dakika )',
     legend_title='Veriler',
     template='simple_white',
-    height=500
+    # height=500
+    autosize=True,
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig)
 
 st.subheader('Plak Bazında Veriler')
 st.dataframe(df_cycle)
