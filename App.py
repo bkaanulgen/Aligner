@@ -17,7 +17,9 @@ recommended_minutes = hhmm_to_minutes('02:00')
 
 st.set_page_config(
     page_title='Filiz🌱 Plak Takibi',
-    layout="wide"
+    layout="wide",
+    page_icon="🌱",
+    initial_sidebar_state="expanded"
 )
 
 st.markdown(
