@@ -75,7 +75,7 @@ fig.update_layout(
     height=500
 )
 
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 st.subheader('Plak Bazında Veriler')
 st.dataframe(df_cycle)
