@@ -15,12 +15,13 @@ df_sum['Toplam Dakika'] = df_sum['Toplam Süre'].apply(hhmm_to_minutes)
 recommended_minutes = hhmm_to_minutes('02:00')
 
 
-# st.title('Filiz🌱 Plak Takibi')
 st.set_page_config(
     page_title='Filiz🌱 Plak Takibi',
-    layout="wide"   # <-- makes the app full-width
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
+st.title('Filiz🌱 Plak Takibi')
 st.subheader('Günlük Toplam Çıkarılma Süreleri')
 
 sum_show_labels = st.radio(
