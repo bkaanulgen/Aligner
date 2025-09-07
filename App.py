@@ -32,7 +32,7 @@ fig.add_trace(go.Scatter(
 st.title('Filiz🌱 Plak Takibi')
 
 with st.container():
-    st.plotly_chart(fig)
-    # st.dataframe(df_all.fillna(''))
+    # st.plotly_chart(fig)
+    st.dataframe(df_all.fillna(''))
     # st.dataframe(df_sum)
     # st.dataframe(df_cycle)
