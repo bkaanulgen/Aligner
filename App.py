@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import altair as alt
 import plotly.graph_objects as go
 
 def hhmm_to_minutes(hhmm):
@@ -86,3 +87,27 @@ st.dataframe(df_sum.drop('Toplam Dakika', axis=1))
 
 st.subheader('Tüm Veriler')
 st.dataframe(df_all.fillna(''))
+
+
+
+
+chart = alt.Chart(df_sum).mark_line(point=True).encode(
+    x=alt.X('Tarih:T', title='Tarih'),
+    y=alt.Y('Toplam Dakika:Q', title='Toplam Dakika'),
+    tooltip=['Tarih', 'Toplam Dakika']
+).properties(
+    width=1200,  # Large fixed width
+    height=400
+)
+
+# Put chart in a horizontally scrollable container
+st.markdown(
+    """
+    <div style="overflow-x: auto; white-space: nowrap;">
+    """,
+    unsafe_allow_html=True
+)
+
+st.altair_chart(chart, use_container_width=False)  # container width is False here
+
+st.markdown("</div>", unsafe_allow_html=True)
