@@ -91,13 +91,28 @@ st.dataframe(df_all.fillna(''))
 
 
 
-chart = alt.Chart(df_sum).mark_line(point=True).encode(
+points = alt.Chart(df_sum).mark_point(color='darkblue').encode(
     x=alt.X('Tarih:T', title='Tarih'),
     y=alt.Y('Toplam Dakika:Q', title='Toplam Dakika'),
     tooltip=['Tarih', 'Toplam Dakika']
-).properties(
-    width=1200,  # Large fixed width
-    height=400
+)
+
+# Text labels
+labels = points.mark_text(
+    align='center',
+    baseline='bottom',
+    dy=-5,  # shift text slightly above points
+    fontSize=12,
+    color='black'
+).encode(
+    text=alt.Text('Toplam Süre:O')  # format to HH:MM
+)
+
+# Combine
+chart = (points + labels).properties(
+    title="Günlük Toplam Çıkarılma Süresi",
+    width=len(df_sum)*25,
+    height=500
 )
 
 # Put chart in a horizontally scrollable container
