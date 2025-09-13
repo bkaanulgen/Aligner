@@ -77,19 +77,8 @@ st.subheader('Günlük Toplam Çıkarılma Süreleri')
 
 # st.plotly_chart(fig)
 
-st.subheader('Plak Bazında Veriler')
-st.dataframe(df_cycle)
 
-st.subheader('Gün Bazında Veriler')
-st.dataframe(df_sum.drop('Toplam Dakika', axis=1))
-
-st.subheader('Tüm Veriler')
-st.dataframe(df_all.fillna(''))
-
-
-
-
-points = alt.Chart(df_sum).mark_point(color='darkblue').encode(
+points = alt.Chart(df_sum).mark_point(filled=True, color='#003366', size=40).encode(
     x=alt.X('Tarih:T', title='Tarih'),
     y=alt.Y('Toplam Dakika:Q', title='Toplam Dakika'),
     tooltip=['Tarih', 'Toplam Dakika']
@@ -106,8 +95,29 @@ labels = points.mark_text(
     text=alt.Text('Toplam Süre:O')  # format to HH:MM
 )
 
+line = alt.Chart(df_sum).mark_line(
+    color='#003366',      # Same deep blue
+    strokeDash=[2, 4],    # Dotted line pattern: [dash_length, gap_length]
+    strokeWidth=2,
+    opacity=0.5          # <-- Transparency for points (0.0 to 1.0)
+).encode(
+    x=alt.X('Tarih:T', title='Tarih'),
+    y=alt.Y('Toplam Dakika:Q', title='Toplam Dakika'),
+)
+
+# **Horizontal reference line at y = 120**
+ref_line = alt.Chart(pd.DataFrame({'Tarih': df_sum['Tarih'], 'Toplam Dakika': [120] * len(df_sum)})).mark_line(
+    color='red',
+    strokeDash=[2, 4],   # Dotted red line
+    strokeWidth=2,
+    opacity=0.3         # <-- Transparency for points (0.0 to 1.0)
+).encode(
+    x=alt.X('Tarih:T', title='Tarih'),
+    y=alt.Y('Toplam Dakika:Q', title='Toplam Dakika'),
+)
+
 # Combine
-chart = (points + labels).properties(
+chart = (ref_line + line + points + labels).properties(
     title="Günlük Toplam Çıkarılma Süresi",
     width=len(df_sum)*25,
     height=500
@@ -121,6 +131,17 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.altair_chart(chart, use_container_width=False)  # container width is False here
+st.altair_chart(chart, use_container_width=False)
 
 st.markdown("</div>", unsafe_allow_html=True)
+
+
+
+st.subheader('Plak Bazında Veriler')
+st.dataframe(df_cycle)
+
+st.subheader('Gün Bazında Veriler')
+st.dataframe(df_sum.drop('Toplam Dakika', axis=1))
+
+st.subheader('Tüm Veriler')
+st.dataframe(df_all.fillna(''))
