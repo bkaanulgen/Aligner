@@ -77,6 +77,7 @@ st.subheader('Günlük Toplam Çıkarılma Süreleri')
 
 # st.plotly_chart(fig)
 
+xaxis = alt.Axis(format='%b %Y', tickCount=df_sum['Tarih'].apply(lambda x: x[5:7]).nunique())
 
 points = alt.Chart(df_sum).mark_point(filled=True, color='#003366', size=40).encode(
     x=alt.X('Tarih:T', title='Tarih'),
@@ -101,7 +102,7 @@ line = alt.Chart(df_sum).mark_line(
     strokeWidth=2,
     opacity=0.5          # <-- Transparency for points (0.0 to 1.0)
 ).encode(
-    x=alt.X('Tarih:T', title='Tarih'),
+    x=alt.X('Tarih:T', axis=xaxis, title='Tarih'),
     y=alt.Y('Toplam Dakika:Q', title='Toplam Dakika'),
 )
 
@@ -138,10 +139,10 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 
 st.subheader('Plak Bazında Veriler')
-st.dataframe(df_cycle)
+st.dataframe(df_cycle.iloc[::-1].reset_index(drop=True))
 
 st.subheader('Gün Bazında Veriler')
-st.dataframe(df_sum.drop('Toplam Dakika', axis=1))
+st.dataframe(df_sum.drop('Toplam Dakika', axis=1).iloc[::-1].reset_index(drop=True))
 
 st.subheader('Tüm Veriler')
-st.dataframe(df_all.fillna(''))
+st.dataframe(df_all.fillna('').iloc[::-1].reset_index(drop=True))
