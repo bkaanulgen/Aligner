@@ -8,13 +8,19 @@ def hhmm_to_minutes(hhmm):
     h, m = map(int, hhmm.split(':'))
     return h * 60 + m
 
+def ddhhmm_to_minutes(ddhhmm):
+    d, h, m = map(int, ddhhmm.split(':'))
+    return d * 60 * 24 + h * 60 + m
+
 
 df_all = pd.read_csv(r"https://raw.githubusercontent.com/bkaanulgen/Aligner/refs/heads/main/csv/All.csv", sep=';')
 df_sum = pd.read_csv(r"https://raw.githubusercontent.com/bkaanulgen/Aligner/refs/heads/main/csv/Sum.csv", sep=';')
 df_cycle = pd.read_csv(r"https://raw.githubusercontent.com/bkaanulgen/Aligner/refs/heads/main/csv/Cycle.csv", sep=';')
 
+
 df_sum['Toplam Dakika'] = df_sum['Toplam Süre'].apply(hhmm_to_minutes)
 df_cycle['Çıkarılan Dakika'] = df_cycle['Çıkarılan Süre'].apply(hhmm_to_minutes)
+df_cycle['Toplam Dakika'] = df_cycle['Toplam Süre'].fillna('00:00:00').apply(ddhhmm_to_minutes)
 recommended_minutes = hhmm_to_minutes('02:00')
 
 
@@ -92,7 +98,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 # Create bar chart
 bars = alt.Chart(df_cycle).mark_bar(color = "#0c3552").encode(
     x=alt.X('Tarih:N', title='Tarih'),
-    y=alt.Y('Çıkarılan Dakika:Q', title='Çıkarılan Süre')
+    y=alt.Y('Çıkarılan Dakika:Q', title='Çıkarılma Süresi (Dakika)')
     ).properties(
     title='Plak Süre',
     height=600
@@ -110,7 +116,36 @@ bar_labels = bars.mark_text(
 )
 
 bar_chart = (bars + bar_labels).properties(
-    title="Günlük Toplam Çıkarılma Süresi",
+    title="Toplam Çıkarılma Süresi (Saat:Dakika)",
+    width=len(df_sum)*25,
+    height=500
+)
+
+st.altair_chart(bar_chart)
+
+
+# Create bar chart
+bars = alt.Chart(df_cycle.fillna('')).mark_bar(color = "#05290D").encode(
+    x=alt.X('Tarih:N', title='Tarih'),
+    y=alt.Y('Toplam Dakika:Q', title='Toplam Süre (Dakika)')
+    ).properties(
+    title='Plak Süre',
+    height=600
+)
+
+bar_labels = bars.mark_text(
+    align='center',
+    baseline='bottom',
+    dy=-5,  # shift text slightly above points
+    fontSize=12,
+    color="#05290D",
+    fontWeight='bold'
+).encode(
+    text=alt.Text('Toplam Süre:O')  # format to HH:MM
+)
+
+bar_chart = (bars + bar_labels).properties(
+    title="Toplam Kullanım Süresi (Gün:Saat:Dakika)",
     width=len(df_sum)*25,
     height=500
 )
