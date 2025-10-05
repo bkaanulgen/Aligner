@@ -18,9 +18,10 @@ df_sum = pd.read_csv(r"https://raw.githubusercontent.com/bkaanulgen/Aligner/refs
 df_cycle = pd.read_csv(r"https://raw.githubusercontent.com/bkaanulgen/Aligner/refs/heads/main/csv/Cycle.csv", sep=';')
 
 
+df_cycle = df_cycle.fillna('00:00:00')
 df_sum['Toplam Dakika'] = df_sum['Toplam Süre'].apply(hhmm_to_minutes)
 df_cycle['Çıkarılan Dakika'] = df_cycle['Çıkarılan Süre'].apply(hhmm_to_minutes)
-df_cycle['Toplam Dakika'] = df_cycle['Toplam Süre'].fillna('00:00:00').apply(ddhhmm_to_minutes)
+df_cycle['Toplam Dakika'] = df_cycle['Toplam Süre'].apply(ddhhmm_to_minutes)
 recommended_minutes = hhmm_to_minutes('02:00')
 
 
@@ -107,12 +108,12 @@ bars = alt.Chart(df_cycle).mark_bar(color = "#0c3552").encode(
 bar_labels = bars.mark_text(
     align='center',
     baseline='bottom',
-    dy=-5,  # shift text slightly above points
+    dy=-5,
     fontSize=12,
     color="#0c3552",
     fontWeight='bold'
 ).encode(
-    text=alt.Text('Çıkarılan Süre:O')  # format to HH:MM
+    text=alt.Text('Çıkarılan Süre:O')
 )
 
 bar_chart = (bars + bar_labels).properties(
@@ -125,7 +126,7 @@ st.altair_chart(bar_chart)
 
 
 # Create bar chart
-bars = alt.Chart(df_cycle.fillna('')).mark_bar(color = "#05290D").encode(
+bars = alt.Chart(df_cycle).mark_bar(color = "#05290D").encode(
     x=alt.X('Tarih:N', title='Tarih'),
     y=alt.Y('Toplam Dakika:Q', title='Toplam Süre (Dakika)')
     ).properties(
@@ -136,12 +137,12 @@ bars = alt.Chart(df_cycle.fillna('')).mark_bar(color = "#05290D").encode(
 bar_labels = bars.mark_text(
     align='center',
     baseline='bottom',
-    dy=-5,  # shift text slightly above points
+    dy=-5,
     fontSize=12,
     color="#05290D",
     fontWeight='bold'
 ).encode(
-    text=alt.Text('Toplam Süre:O')  # format to HH:MM
+    text=alt.Text('Toplam Süre:O')
 )
 
 bar_chart = (bars + bar_labels).properties(
@@ -157,7 +158,7 @@ st.subheader('Plak Bazında Veriler')
 st.dataframe(df_cycle.iloc[::-1].reset_index(drop=True))
 
 st.subheader('Gün Bazında Veriler')
-st.dataframe(df_sum.drop('Toplam Dakika', axis=1).iloc[::-1].reset_index(drop=True))
+st.dataframe(df_sum.iloc[::-1].reset_index(drop=True))
 
 st.subheader('Tüm Veriler')
 st.dataframe(df_all.fillna('').iloc[::-1].reset_index(drop=True))
